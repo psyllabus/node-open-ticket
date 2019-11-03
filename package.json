@@ -1,0 +1,38 @@
+{
+  "name": "open-ticket",
+  "version": "1.0.0",
+  "description": "Event tickets sale management",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha --recursive --reporter spec -r ts-node/register test/**/*.test.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/psyllabus/node-open-ticket.git"
+  },
+  "keywords": [
+    "events",
+    "tickets",
+    "sale"
+  ],
+  "author": "Romain GUYOT de la HARDROUYERE",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/psyllabus/node-open-ticket/issues"
+  },
+  "homepage": "https://github.com/psyllabus/node-open-ticket#readme",
+  "dependencies": {
+    "mongodb": "^3.3.3"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.2.4",
+    "@types/chai-as-promised": "^7.1.2",
+    "@types/mocha": "^5.2.7",
+    "@types/mongodb": "^3.3.8",
+    "chai": "^4.2.0",
+    "chai-as-promised": "^7.1.1",
+    "mocha": "^6.2.2",
+    "ts-node": "^8.4.1",
+    "typescript": "^3.6.4"
+  }
+}
