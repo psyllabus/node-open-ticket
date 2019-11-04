@@ -1,0 +1,80 @@
+import chai from 'chai';
+const expect = chai.expect;
+
+import { EventService } from '../../src/services/events';
+
+import fixtures from '../fixtures';
+import { TicketGroupService } from '../../src/services/ticketGroups';
+import { Service } from '../../src/services/service';
+
+const services = {
+    events: EventService,
+    ticketGroups: TicketGroupService
+}
+
+require('../test.bootstrap.ts');
+
+/**
+ * Generic services test for CRUD operations.
+ */
+describe('services', function () {
+    for (const itemType in fixtures) {
+        const singularItemType = itemType.substring(0, -1);
+        if (fixtures.hasOwnProperty(itemType)) {
+            const data = fixtures[itemType];
+            describe(itemType, function () {
+                const ServiceClass = services[itemType];
+                let service: Service<any>;
+
+                before(function () {
+                    service = new ServiceClass(this.db);
+                });
+
+                it(`should create an ${singularItemType}`, function () {
+                    return service.create(data[0])
+                    .then(event => {
+                        expect(event).to.deep.equal(data[0]);
+                    });
+                });
+
+                it(`should retrieve the ${singularItemType}`, function () {
+                    return expect(service.get(data[0]._id)).to.eventually.be.deep.equal(data[0]);
+                });
+
+                it(`should update the ${singularItemType}`, function () {
+                    return service.update(data[0]._id, data[1])
+                    .then(event => {
+                        expect(event).to.be.deep.equal(data[1]);
+                        return expect(service.get(data[0]._id)).to.eventually.be.deep.equal(data[1])
+                    });
+                });
+
+                it(`should list all ${itemType}`, function () {
+                    return service.create(data[2])
+                    .then(event => {
+                        expect(event).to.be.deep.equal(data[2]);
+                        return expect(service.list()).to.eventually.be.deep.equal([data[1], data[2]]);
+                    })
+                });
+
+                it(`should list first page of ${itemType}`, function () {
+                    return expect(service.list(1)).to.eventually.be.deep.equal([data[1]]);
+                })
+
+                it(`should list second page of ${itemType}`, function () {
+                    return expect(service.list(1, 1)).to.eventually.be.deep.equal([data[2]]);
+                });
+
+                it(`should delete existing ${itemType}`, function () {
+                    return service.delete(data[0]._id)
+                    .then(() => {
+                       return Promise.all([
+                           expect(service.get(data[0]._id)).to.eventually.be.null,
+                           expect(service.list()).to.eventually.be.deep.equal([data[2]])
+                       ]);
+                    });
+                });
+            });
+        }
+    }
+});

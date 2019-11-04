@@ -44,6 +44,6 @@ export class Service<ServiceItem> {
     }
 
     delete(id: string) {
-        return this.col.remove({_id: id});
+        return this.col.deleteOne({_id: id});
     }
 }
