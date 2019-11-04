@@ -1,5 +1,7 @@
 import events from './events';
 import ticketGroups from './ticketGroups';
+import attendees from './attendees';
+import tickets from './tickets';
 
 
 /**
@@ -8,5 +10,7 @@ import ticketGroups from './ticketGroups';
  */
 export default {
     events: events,
-    ticketGroups: ticketGroups
-}
+    ticketGroups: ticketGroups,
+    attendees: attendees,
+    tickets: tickets
+};

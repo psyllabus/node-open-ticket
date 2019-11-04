@@ -1,15 +1,18 @@
 import chai from 'chai';
 const expect = chai.expect;
 
-import { EventService } from '../../src/services/events';
-
 import fixtures from '../fixtures';
+import { EventService } from '../../src/services/events';
 import { TicketGroupService } from '../../src/services/ticketGroups';
+import { AttendeeService } from '../../src/services/attendees';
 import { Service } from '../../src/services/service';
+import { TicketService } from '../../src/services/tickets';
 
 const services = {
     events: EventService,
-    ticketGroups: TicketGroupService
+    ticketGroups: TicketGroupService,
+    attendees: AttendeeService,
+    tickets: TicketService
 }
 
 require('../test.bootstrap.ts');

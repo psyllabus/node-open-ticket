@@ -1,3 +1,5 @@
+import { TicketGroup } from "../../src/services/ticketGroups/types";
+
 export default [
     {
         "_id": "ticket-group-id-1",
@@ -32,4 +34,4 @@ export default [
         "sale_open": new Date("2019-11-15T22:00:00.000Z"),
         "sale_close": new Date("2019-11-16T08:00:00.000Z")
     },
-]
+] as TicketGroup[];

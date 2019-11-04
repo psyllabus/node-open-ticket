@@ -6,4 +6,6 @@ export class TicketGroupService extends Service<TicketGroup> {
     constructor(db: Db) {
         super(db, 'ticketGroups');
     }
+
+    // TODO: override and verify links are valid
 }
