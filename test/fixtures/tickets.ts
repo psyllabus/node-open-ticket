@@ -1,6 +1,6 @@
 import { Ticket } from "../../src/services/tickets/types";
 
-export default [{
+export const data: Ticket[] = [{
     _id: 'my-ticket-id-1',
     event_id: 'my-event',
     ticket_group_id: 'my-ticket-group',
@@ -30,4 +30,4 @@ export default [{
     price: 199.99,
     attendee_name: 'Hiestaa',
     attendee_email: 'hello@world.next'
-}] as Ticket[];
+}];

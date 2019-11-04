@@ -7,6 +7,7 @@ import { TicketGroupService } from '../../src/services/ticketGroups';
 import { AttendeeService } from '../../src/services/attendees';
 import { Service } from '../../src/services/service';
 import { TicketService } from '../../src/services/tickets';
+import { Db } from 'mongodb';
 
 const services = {
     events: EventService,
@@ -17,6 +18,19 @@ const services = {
 
 require('../test.bootstrap.ts');
 
+const createDependencies = async (db: Db, dependencies: { [key: string]: any[] }) => {
+    for (const itemType in dependencies) {
+        const col = db.collection(itemType);
+        if (dependencies.hasOwnProperty(itemType)) {
+            const items = dependencies[itemType];
+            for (let i = 0; i < items.length; i++) {
+                const item = items[i];
+                await col.insertOne(item);
+            }
+        }
+    }
+}
+
 /**
  * Generic services test for CRUD operations.
  */
@@ -24,13 +38,14 @@ describe('services', function () {
     for (const itemType in fixtures) {
         const singularItemType = itemType.substring(0, -1);
         if (fixtures.hasOwnProperty(itemType)) {
-            const data = fixtures[itemType];
+            const {data, dependencies} = fixtures[itemType];
             describe(itemType, function () {
                 const ServiceClass = services[itemType];
                 let service: Service<any>;
 
                 before(function () {
                     service = new ServiceClass(this.db);
+                    return createDependencies(this.db, dependencies);
                 });
 
                 it(`should create an ${singularItemType}`, function () {

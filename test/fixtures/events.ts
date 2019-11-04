@@ -1,6 +1,6 @@
 import { Event } from "../../src/services/events/types";
 
-export default [
+export const data: Event[] = [
     {
         "_id": "event-id-1",
         "name": "My First Event",
@@ -19,4 +19,4 @@ export default [
         "start": new Date("2019-12-01T20:00:00.000Z"),
         "end": new Date("2019-12-02T03:00:00.000Z")
     }
-] as Event[];
+];
