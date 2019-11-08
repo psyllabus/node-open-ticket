@@ -7,5 +7,15 @@ export class AttendeeService extends Service<Attendee> {
         super(db, 'attendees');
     }
 
-    // TODO: safeguards and link verification on CRUD
+    checkRequiredFor(id: string) {
+        return this._col('tickets').find({
+            attendee_id: id
+        }).count().then(count => {
+            if (count > 0) {
+                throw new Error(
+                    `Unable to delete attendee ${id} as some tickets depend on it.`
+                );
+            }
+        });
+    }
 }

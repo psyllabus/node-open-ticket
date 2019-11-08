@@ -25,7 +25,14 @@ export class EventService extends Service<Event> {
                     `Unable to delete event ${id} as some ticketGroups depend on it.`
                 );
             }
-            return id;
-        });
+        }).then(() => this._col('tickets').count({
+            event_id: id
+        }).then(count => {
+            if (count > 0) {
+                throw new Error(
+                    `Unable to delete event ${id} as some tickets depend on it.`
+                );
+            }
+        }));
     }
 }

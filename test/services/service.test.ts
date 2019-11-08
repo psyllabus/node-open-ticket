@@ -38,7 +38,7 @@ const createDependencies = async (db: Db, dependencies: { [key: string]: any[] }
  * 2. Read DATA[0] - also test item was properly inserted
  * 3. Update DATA[0] <- DATA[1]
  * 4. Create DATA[2], List all, list per page
- * 5. Delete DATA[2]
+ * 5. Delete DATA[1]
  * 6. Try delete dependencies[depType].map(({_id}) => service.delete(_id), ;should fail
  * 7. Try insert missing dependencies, should fail
  */
@@ -114,14 +114,13 @@ describe('services', function () {
                         if (dependencies.hasOwnProperty(depType)) {
                             const singularDepType = depType.substring(0, depType.length - 1);
 
-                            it(`should not be able to delete any dependent ${singularDepType}`, function () {
+                            it(`should not be able to delete a dependent ${singularDepType}`, function () {
                                 const DepServiceClass = services[depType];
                                 const depService = new DepServiceClass(this.db);
-                                return Promise.all(dependencies[depType].map(({ _id }) =>
-                                    expect(depService.delete(_id)).to.eventually.be.rejectedWith(
-                                        `Unable to delete ${singularDepType} ${_id} as some ${itemType} depend on it.`
-                                    )
-                                ));
+                                const {_id} = dependencies[depType][0];
+                                return expect(depService.delete(_id)).to.eventually.be.rejectedWith(
+                                    `Unable to delete ${singularDepType} ${_id} as some ${itemType} depend on it.`
+                                );
                             });
                         }
                     }

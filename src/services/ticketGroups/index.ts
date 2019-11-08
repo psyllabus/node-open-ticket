@@ -44,7 +44,9 @@ export class TicketGroupService extends Service<TicketGroup> {
             ticket_group_id: id
         }).count().then(count => {
             if (count > 0) {
-                throw new Error(`Unable to delete ticket group ${id}: ${count} tickets already sold.`);
+                throw new Error(
+                    `Unable to delete ticketGroup ${id} as some tickets depend on it.`
+                );
             }
         })
 
