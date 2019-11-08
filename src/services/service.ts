@@ -1,20 +1,33 @@
 import { Collection, Db } from "mongodb";
+import { COLLECTION } from "./collections";
 
 export class Service<ServiceItem> {
     db: Db;
     col: Collection;
-    constructor(db: Db, collection: string) {
+    constructor(db: Db, collection: COLLECTION) {
         this.db = db;
         this.col = this.db.collection(collection);
     }
 
+    _col(collection: COLLECTION): Collection {
+        return this.db.collection(collection);
+    }
+
+    validate(item: ServiceItem) { }
+    checkRequirements(item: ServiceItem): Promise<any> { return Promise.resolve(); }
+    checkRequiredFor(id: string): Promise<any> { return Promise.resolve(); }
+
     create(item: ServiceItem): Promise<ServiceItem> {
-        return this.col.insertOne(item)
-        .then(res => {
-            if (res.result.ok != 1 || res.result.n != 1) {
-                return Promise.reject(new Error('The item has not been inserted successfully.'));
-            }
-            return res.ops[0];
+        return Promise.resolve().then(() => this.validate(item)).then(() => {
+            return this.checkRequirements(item).then(() => {
+                return this.col.insertOne(item)
+                .then(res => {
+                    if (res.result.ok != 1 || res.result.n != 1) {
+                        return Promise.reject(new Error('The item has not been inserted successfully.'));
+                    }
+                    return res.ops[0];
+                });
+            }).catch((err) => Promise.reject(new Error(`Unable to create ticketGroup: ` + err.message)));
         });
     }
 
@@ -34,16 +47,22 @@ export class Service<ServiceItem> {
     }
 
     update(id: string, item: ServiceItem): Promise<ServiceItem> {
-        return this.col.updateOne({_id: id}, {$set: item})
-        .then(res => {
-            if (res.result.ok != 1 || res.result.n != 1 || res.result.nModified != 1) {
-                return Promise.reject(new Error('The item has not been updated successfully.'));
-            }
-            return this.get(id);
+        return Promise.resolve().then(() => this.validate(item)).then(() => {
+            return this.checkRequirements(item).then(() => {
+                return this.col.updateOne({_id: id}, {$set: item})
+                .then(res => {
+                    if (res.result.ok != 1 || res.result.n != 1 || res.result.nModified != 1) {
+                        return Promise.reject(new Error('The item has not been updated successfully.'));
+                    }
+                    return this.get(id);
+                });
+            }).catch((err) => Promise.reject(new Error(`Unable to update ticketGroup: ` + err.message)));
         });
     }
 
     delete(id: string) {
-        return this.col.deleteOne({_id: id});
+        return this.checkRequiredFor(id).then(() => {
+            return this.col.deleteOne({_id: id});
+        })
     }
 }

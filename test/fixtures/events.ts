@@ -20,3 +20,18 @@ export const data: Event[] = [
         "end": new Date("2019-12-02T03:00:00.000Z")
     }
 ];
+
+export const invalidItems: {[key: string]: Event} = {
+    'starts after it ends': {
+        "_id": "failed-event-id-1",
+        "name": "failure",
+        "start": new Date(),
+        "end": new Date(new Date().getTime() - 100000)
+    },
+    'empty name': {
+        "_id": "failed-event-id-1",
+        "name": "",
+        "start": new Date(),
+        "end": new Date(new Date().getTime() - 100000)
+    }
+};
