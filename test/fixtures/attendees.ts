@@ -19,3 +19,16 @@ export const data: Attendee[] = [
         "password": "Seriously who stores passwords in clear text?"
     }
 ];
+
+export const invalidItems: { [key: string]: Attendee} = {
+    'missing name': {
+        "_id": "invalid-attendee-id-1",
+        "name": "",
+        "email": "some@email.com"
+    },
+    'missing email': {
+        "_id": "invalid-attendee-id-2",
+        "name": "some name",
+        "email": ""
+    }
+};

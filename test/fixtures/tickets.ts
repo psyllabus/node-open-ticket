@@ -10,6 +10,7 @@ export const data: Ticket[] = [{
     attendee_id: 'my-attendee',
     date_purchase: new Date("2019-11-02T21:00:00.000Z"),
     stripe_charge_id: 'mock-stripe-charge',
+    stripe_token: 'my-token',
     price: 99.99,
     attendee_name: 'Romain G',
     attendee_email: 'rom1guyot@gmail.com'
@@ -20,6 +21,7 @@ export const data: Ticket[] = [{
     attendee_id: 'my-attendee-updated',
     date_purchase: new Date("2019-11-02T22:00:00.000Z"),
     stripe_charge_id: 'mock-stripe-charge-updated',
+    stripe_token: 'my-token',
     price: 100,
     attendee_name: 'Romain Guyot',
     attendee_email: 'rom2guyot@gmail.com'
@@ -30,6 +32,7 @@ export const data: Ticket[] = [{
     attendee_id: 'my-attendee',
     date_purchase: new Date("2019-11-12T21:00:00.000Z"),
     stripe_charge_id: 'mock-stripe-charge-2',
+    stripe_token: 'my-token',
     price: 199.99,
     attendee_name: 'Hiestaa',
     attendee_email: 'hello@world.next'
@@ -63,5 +66,101 @@ export const dependencies: { events: Event[], ticketGroups: TicketGroup[], atten
         "_id": "my-attendee",
         "name": "An Attendee",
         "email": "an@attendee.com"
+    },{
+        "_id": "my-attendee-updated",
+        "name": "An Attendee Updated",
+        "email": "an@attendee.update.com"
     }]
 };
+
+export const missingDependencies: { event: Ticket, ticketGroup: Ticket, attendee: Ticket } = {
+    event: {
+        _id: 'my-invalid-ticket-id-1',
+        event_id: 'my-non-existing-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-02T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge',
+        stripe_token: 'my-token',
+        price: 99.99,
+        attendee_name: 'Romain G',
+        attendee_email: 'rom1guyot@gmail.com'
+    },
+
+    ticketGroup: {
+        _id: 'my-invalid-ticket-id-2',
+        event_id: 'my-event',
+        ticket_group_id: 'my-non-existing-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-02T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge',
+        stripe_token: 'my-token',
+        price: 99.99,
+        attendee_name: 'Romain G',
+        attendee_email: 'rom1guyot@gmail.com'
+    },
+
+    attendee: {
+        _id: 'my-invalid-ticket-id-3',
+        event_id: 'my-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-non-existing-attendee',
+        date_purchase: new Date("2019-11-02T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge',
+        stripe_token: 'my-token',
+        price: 99.99,
+        attendee_name: 'Romain G',
+        attendee_email: 'rom1guyot@gmail.com'
+    }
+}
+
+export const invalidItems: {[key: string]: Ticket } = {
+    'missing stripe token': {
+        _id: 'my-invalid-ticket-id-4',
+        event_id: 'my-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-12T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge-2',
+        stripe_token: '',
+        price: 199.99,
+        attendee_name: 'Hiestaa',
+        attendee_email: 'hello@world.next'
+    },
+    'missing stripe charges': {
+        _id: 'my-invalid-ticket-id-5',
+        event_id: 'my-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-12T21:00:00.000Z"),
+        stripe_charge_id: '',
+        stripe_token: 'some-token',
+        price: 199.99,
+        attendee_name: 'Hiestaa',
+        attendee_email: 'hello@world.next'
+    },
+    'missing attendee name': {
+        _id: 'my-invalid-ticket-id-6',
+        event_id: 'my-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-12T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge-2',
+        stripe_token: 'mock-token',
+        price: 199.99,
+        attendee_name: '',
+        attendee_email: 'hello@world.next'
+    },
+    'missing attendee email': {
+        _id: 'my-invalid-ticket-id-6',
+        event_id: 'my-event',
+        ticket_group_id: 'my-ticket-group',
+        attendee_id: 'my-attendee',
+        date_purchase: new Date("2019-11-12T21:00:00.000Z"),
+        stripe_charge_id: 'mock-stripe-charge-2',
+        stripe_token: 'mock-token',
+        price: 199.99,
+        attendee_name: 'Some name',
+        attendee_email: ''
+    }
+}

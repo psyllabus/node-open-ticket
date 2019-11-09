@@ -27,7 +27,7 @@ export class Service<ServiceItem> {
                     }
                     return res.ops[0];
                 });
-            }).catch((err) => Promise.reject(new Error(`Unable to create ticketGroup: ` + err.message)));
+            }).catch((err) => Promise.reject(new Error(`Unable to create item: ` + err.message)));
         });
     }
 
@@ -35,7 +35,8 @@ export class Service<ServiceItem> {
         return this.col.findOne({_id: id});
     }
 
-    list(perPage?: number, page?: number) {
+    list
+    (perPage?: number, page?: number) {
         let cursor = this.col.find({});
         if (!page) {
             page = 0;
@@ -56,7 +57,7 @@ export class Service<ServiceItem> {
                     }
                     return this.get(id);
                 });
-            }).catch((err) => Promise.reject(new Error(`Unable to update ticketGroup: ` + err.message)));
+            }).catch((err) => Promise.reject(new Error(`Unable to update item: ` + err.message)));
         });
     }
 

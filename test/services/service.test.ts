@@ -55,7 +55,16 @@ describe('services', function () {
                 before(function () {
                     itemService = new ItemServiceClass(this.db);
                     return createDependencies(this.db, dependencies);
-                })
+                });
+
+                after(function () {
+                    return Promise.all([
+                        this.db.collection('tickets').remove({}),
+                        this.db.collection('attendees').remove({}),
+                        this.db.collection('ticketGroups').remove({}),
+                        this.db.collection('events').remove({}),
+                    ]);
+                });
 
                 // afterEach(function () {
                 //     return itemService.list().then(items => {
@@ -130,12 +139,12 @@ describe('services', function () {
                             const element = missingDependencies[depType];
                             it(`Should not be able to insert a ${itemType} with missing ${depType} dependency.`, function () {
                                 return expect(itemService.create(element)).to.eventually.be.rejectedWith(
-                                    `Unable to create ${singularItemType}: missing ${depType} dependency: `
+                                    `Unable to create item: missing ${depType} dependency: `
                                 );
                             });
                             it(`Should not be able to update a ${itemType} with missing ${depType} dependency.`, function () {
                                 return expect(itemService.update(data[0]._id, element)).to.eventually.be.rejectedWith(
-                                    `Unable to update ${singularItemType}: missing ${depType} dependency: `
+                                    `Unable to update item: missing ${depType} dependency: `
                                 );
                             });
                         }
