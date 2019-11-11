@@ -17,6 +17,11 @@ export const data: Attendee[] = [
         "name": "Hiestaa",
         "email": "hello@world.net",
         "password": "Seriously who stores passwords in clear text?"
+    },
+    {
+        "_id": "attendee-id-3",
+        "name": "Prof X",
+        "email": "prof@x.com"
     }
 ];
 

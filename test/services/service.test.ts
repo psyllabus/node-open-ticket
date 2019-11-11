@@ -1,6 +1,8 @@
 import chai from 'chai';
 const expect = chai.expect;
 
+require('../test.bootstrap.ts');
+
 import fixtures from '../fixtures';
 import { EventService } from '../../src/services/events';
 import { TicketGroupService } from '../../src/services/ticketGroups';
@@ -16,7 +18,6 @@ const services = {
     tickets: TicketService
 }
 
-require('../test.bootstrap.ts');
 
 const createDependencies = async (db: Db, dependencies: { [key: string]: any[] }) => {
     for (const itemType in (dependencies || {})) {
@@ -59,10 +60,10 @@ describe('services', function () {
 
                 after(function () {
                     return Promise.all([
-                        this.db.collection('tickets').remove({}),
-                        this.db.collection('attendees').remove({}),
-                        this.db.collection('ticketGroups').remove({}),
-                        this.db.collection('events').remove({}),
+                        this.db.collection('tickets').deleteMany({}),
+                        this.db.collection('attendees').deleteMany({}),
+                        this.db.collection('ticketGroups').deleteMany({}),
+                        this.db.collection('events').deleteMany({}),
                     ]);
                 });
 
@@ -157,7 +158,10 @@ describe('services', function () {
                         if (invalidItems.hasOwnProperty(reason)) {
                             const item = invalidItems[reason];
                             it(`It should fail inserting a ${singularItemType} with ${reason}`, function () {
-                                return expect(itemService.create(item)).to.eventually.be.rejected;
+                                return expect(itemService.create(item).catch((err) => {return Promise.reject(err)})).to.eventually.be.rejected;
+                            });
+                            it(`It should fail updating a ${singularItemType} with ${reason}`, function () {
+                                return expect(itemService.update(data[0]._id, item)).to.eventually.be.rejected;
                             });
                         }
                     }

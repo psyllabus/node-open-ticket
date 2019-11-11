@@ -18,40 +18,40 @@ export class TicketService extends Service<Ticket> {
     }
 
     validate(item: Ticket) {
-        if (!item.attendee_name || item.attendee_name.length == 0) {
+        if (!item.attendeeName || item.attendeeName.length == 0) {
             throw new Error('Missing ticket holder name');
         }
 
         // TODO: validate email regex? Try send an email with confirmation link?
         // OR: offer a way to update email after the fact, given an attendee id and password
         // might require a shortcode that is human readable instead of ugly mongodb id
-        if (!item.attendee_email || item.attendee_email.length == 0) {
+        if (!item.attendeeEmail || item.attendeeEmail.length == 0) {
             throw new Error("Missing ticket holder email");
         }
 
-        if (!item.stripe_token || item.stripe_token.length == 0) {
+        if (!item.paymentToken || item.paymentToken.length == 0) {
             throw new Error('Missing stripe token');
         }
 
-        if (!item.stripe_charge_id || item.stripe_charge_id.length == 0) {
+        if (!item.paymentId || item.paymentId.length == 0) {
             throw new Error('Missing stripe charge');
         }
     }
 
     checkRequirements(item: Ticket): Promise<any> {
-        return this.eventService.get(item.event_id)
+        return this.eventService.get(item.eventId)
         .then(event => {
             if (!event) {
-                throw new Error(`missing event dependency: '${item.event_id}'`);
+                throw new Error(`missing event dependency: '${item.eventId}'`);
             }
         })
-        .then(() => this.attendeeService.get(item.attendee_id)).then(attendee => {
+        .then(() => this.attendeeService.get(item.attendeeId)).then(attendee => {
             if (!attendee) {
-                throw new Error(`missing attendee dependency: '${item.attendee_id}'`)
+                throw new Error(`missing attendee dependency: '${item.attendeeId}'`)
             }
-        }).then(() => this.ticketGroupService.get(item.ticket_group_id)).then(ticketGroup => {
+        }).then(() => this.ticketGroupService.get(item.ticketGroupId)).then(ticketGroup => {
             if (!ticketGroup) {
-                throw new Error(`missing ticketGroup dependency: '${item.ticket_group_id}'`);
+                throw new Error(`missing ticketGroup dependency: '${item.ticketGroupId}'`);
             }
         });
     }

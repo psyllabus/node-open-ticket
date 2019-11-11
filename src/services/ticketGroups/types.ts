@@ -1,12 +1,12 @@
 export interface TicketGroup {
     _id?: string;
-    event_id: string;
+    eventId: string;
     name: string;
     description?: string;
-    is_limited: boolean;
+    isLimited: boolean;
     limit: number;
     price: number;
     currency: string;
-    sale_open: Date;
-    sale_close?: Date;
+    saleOpen: Date;
+    saleClose?: Date;
 };

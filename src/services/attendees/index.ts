@@ -24,7 +24,7 @@ export class AttendeeService extends Service<Attendee> {
 
     checkRequiredFor(id: string) {
         return this._col('tickets').find({
-            attendee_id: id
+            attendeeId: id
         }).count().then(count => {
             if (count > 0) {
                 throw new Error(

@@ -13,13 +13,13 @@ export class TicketGroupService extends Service<TicketGroup> {
     }
 
     validate(item: TicketGroup) {
-        if (item.sale_close && item.sale_close.getTime() < item.sale_open.getTime()) {
+        if (item.saleClose && item.saleClose.getTime() < item.saleOpen.getTime()) {
             throw new Error(`Sale closes before it opens`);
         }
         if (!item.name || item.name.length == 0) {
             throw new Error(`Ticket Group has no name`);
         }
-        if (item.is_limited && item.limit <= 0) {
+        if (item.isLimited && item.limit <= 0) {
             throw new Error(`Limited ticket groups need to have a limit!`);
         }
         if (!item.currency || item.currency.length == 0) {
@@ -31,17 +31,29 @@ export class TicketGroupService extends Service<TicketGroup> {
     }
 
     checkRequirements(item: TicketGroup) {
-        return this.eventService.get(item.event_id)
+        return this.eventService.get(item.eventId)
         .then(event => {
             if (!event) {
-                throw new Error(`missing event dependency: '${item.event_id}' referenced by ticket group '${item.name}' does not exist.`);
+                throw new Error(
+                    `missing event dependency: '${item.eventId}' referenced by ticket ` +
+                    `group '${item.name}' does not exist.`);
+            }
+            if (item.saleClose && item.saleClose.getTime() > event.end.getTime()) {
+                throw new Error(
+                    `cannot define a ticket group closing sale on ${item.saleClose} which ` +
+                    `is after the end of the event ${event.end}`);
+            }
+            if (item.saleOpen && item.saleOpen.getTime() > event.end.getTime()) {
+                throw new Error(
+                    `cannot define a ticket group opening sale on ${item.saleOpen} which ` +
+                    `is after the end of the event ${event.end}`);
             }
         });
     }
 
     checkRequiredFor(id: string) {
         return this._col('tickets').find({
-            ticket_group_id: id
+            ticketGroupId: id
         }).count().then(count => {
             if (count > 0) {
                 throw new Error(

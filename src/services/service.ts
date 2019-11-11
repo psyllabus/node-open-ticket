@@ -35,8 +35,7 @@ export class Service<ServiceItem> {
         return this.col.findOne({_id: id});
     }
 
-    list
-    (perPage?: number, page?: number) {
+    list(perPage?: number, page?: number) {
         let cursor = this.col.find({});
         if (!page) {
             page = 0;

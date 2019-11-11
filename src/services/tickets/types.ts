@@ -1,12 +1,12 @@
 export interface Ticket {
     _id?: string;
-    event_id: string;
-    ticket_group_id: string;
-    attendee_id: string;
-    date_purchase: Date;
-    stripe_charge_id: string;
-    stripe_token: string;
+    eventId: string;
+    ticketGroupId: string;
+    attendeeId: string;
+    datePurchase: Date;
+    paymentId: string;
+    paymentToken: string;
     price: number;  // From related ticket group
-    attendee_name: string;  // from related attendee
-    attendee_email: string;  // from related attendee
+    attendeeName: string;  // from related attendee
+    attendeeEmail: string;  // from related attendee
 };

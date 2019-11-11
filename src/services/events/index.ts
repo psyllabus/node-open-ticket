@@ -18,7 +18,7 @@ export class EventService extends Service<Event> {
 
     checkRequiredFor(id: string) {
         return this._col('ticketGroups').count({
-            event_id: id
+            eventId: id
         }).then(count => {
             if (count > 0) {
                 throw new Error(
@@ -26,7 +26,7 @@ export class EventService extends Service<Event> {
                 );
             }
         }).then(() => this._col('tickets').count({
-            event_id: id
+            eventId: id
         }).then(count => {
             if (count > 0) {
                 throw new Error(
